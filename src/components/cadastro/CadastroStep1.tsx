@@ -36,7 +36,17 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
   });
 
   const handleInputChange = (field: string, value: any) => {
-    setFormData({ ...formData, [field]: value });
+    if (field === "cpf") {
+      // Remover caracteres não numéricos e aplicar máscara
+      const numericValue = value.replace(/\D/g, "");
+      const maskedValue = numericValue
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      setFormData({ ...formData, [field]: maskedValue });
+    } else {
+      setFormData({ ...formData, [field]: value });
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -59,9 +69,9 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Consentimentos */}
       <div className="space-y-4">
-        <Card className="border-warning">
+        <Card className="border-secondary">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-warning">
+            <CardTitle className="flex items-center gap-2 text-secondary">
               <Shield className="w-5 h-5" />
               Consentimento para Compartilhamento de Dados
             </CardTitle>

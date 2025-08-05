@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Stethoscope, ArrowLeft } from "lucide-react";
+import { Stethoscope, ArrowLeft, Upload } from "lucide-react";
 
 interface CadastroStep2Props {
   onNext: (data: any) => void;
@@ -24,11 +24,17 @@ const CadastroStep2 = ({ onNext, onPrev, initialData }: CadastroStep2Props) => {
     tratamentos: "",
     tipoTratamento: "",
     outrosDiagnosticos: "",
+    laudoMedico: null as File | null,
     ...initialData
   });
 
   const handleInputChange = (field: string, value: any) => {
     setFormData({ ...formData, [field]: value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData({ ...formData, laudoMedico: file });
   };
 
   const handleSequelaChange = (sequela: string, checked: boolean) => {
@@ -189,6 +195,36 @@ const CadastroStep2 = ({ onNext, onPrev, initialData }: CadastroStep2Props) => {
                 placeholder="Informe outros diagnósticos médicos que você possui"
                 rows={2}
               />
+            </div>
+
+            <div>
+              <Label htmlFor="laudoMedico">Laudo ou Relatório Médico (opcional)</Label>
+              <div className="mt-2">
+                <input
+                  type="file"
+                  id="laudoMedico"
+                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <label 
+                  htmlFor="laudoMedico" 
+                  className="flex items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors"
+                >
+                  <div className="text-center">
+                    <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">
+                      {formData.laudoMedico 
+                        ? `Arquivo selecionado: ${formData.laudoMedico.name}` 
+                        : "Clique para fazer upload do laudo médico"
+                      }
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      PDF, JPG, PNG, DOC até 10MB
+                    </p>
+                  </div>
+                </label>
+              </div>
             </div>
           </div>
 

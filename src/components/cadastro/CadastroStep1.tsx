@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,11 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
     identidade: "",
     genero: "",
     endereco: "",
+    numero: "",
+    complemento: "",
+    cidade: "",
+    estado: "",
+    cep: "",
     telefone: "",
     whatsapp: "",
     email: "",
@@ -43,6 +49,29 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
         .replace(/(\d{3})(\d)/, "$1.$2")
         .replace(/(\d{3})(\d)/, "$1.$2")
         .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      setFormData({ ...formData, [field]: maskedValue });
+    } else if (field === "telefone") {
+      // Remover caracteres não numéricos
+      const numericValue = value.replace(/\D/g, "");
+      let maskedValue = "";
+      
+      if (numericValue.length <= 10) {
+        // Formato: (00)0000-0000
+        maskedValue = numericValue
+          .replace(/(\d{2})(\d)/, "($1)$2")
+          .replace(/(\d{4})(\d{1,4})$/, "$1-$2");
+      } else {
+        // Formato: (00)00000-0000
+        maskedValue = numericValue
+          .replace(/(\d{2})(\d)/, "($1)$2")
+          .replace(/(\d{5})(\d{1,4})$/, "$1-$2");
+      }
+      
+      setFormData({ ...formData, [field]: maskedValue });
+    } else if (field === "cep") {
+      // Máscara CEP: 00000-000
+      const numericValue = value.replace(/\D/g, "");
+      const maskedValue = numericValue.replace(/(\d{5})(\d{1,3})$/, "$1-$2");
       setFormData({ ...formData, [field]: maskedValue });
     } else {
       setFormData({ ...formData, [field]: value });
@@ -183,14 +212,103 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
           </RadioGroup>
         </div>
 
-        <div>
-          <Label htmlFor="endereco">Endereço</Label>
-          <Input 
-            id="endereco"
-            value={formData.endereco}
-            onChange={(e) => handleInputChange("endereco", e.target.value)}
-            placeholder="Rua, número, bairro, cidade, estado"
-          />
+        {/* Endereço dividido em campos */}
+        <div className="space-y-4">
+          <h4 className="text-md font-medium text-primary">Endereço</h4>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <Label htmlFor="endereco">Endereço</Label>
+              <Input 
+                id="endereco"
+                value={formData.endereco}
+                onChange={(e) => handleInputChange("endereco", e.target.value)}
+                placeholder="Rua, Avenida, etc."
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="numero">Número</Label>
+              <Input 
+                id="numero"
+                value={formData.numero}
+                onChange={(e) => handleInputChange("numero", e.target.value)}
+                placeholder="123"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <Label htmlFor="complemento">Complemento</Label>
+              <Input 
+                id="complemento"
+                value={formData.complemento}
+                onChange={(e) => handleInputChange("complemento", e.target.value)}
+                placeholder="Apto, Bloco, etc."
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="cidade">Cidade</Label>
+              <Input 
+                id="cidade"
+                value={formData.cidade}
+                onChange={(e) => handleInputChange("cidade", e.target.value)}
+                placeholder="Nome da cidade"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="estado">Estado</Label>
+              <Select onValueChange={(value) => handleInputChange("estado", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AC">Acre</SelectItem>
+                  <SelectItem value="AL">Alagoas</SelectItem>
+                  <SelectItem value="AP">Amapá</SelectItem>
+                  <SelectItem value="AM">Amazonas</SelectItem>
+                  <SelectItem value="BA">Bahia</SelectItem>
+                  <SelectItem value="CE">Ceará</SelectItem>
+                  <SelectItem value="DF">Distrito Federal</SelectItem>
+                  <SelectItem value="ES">Espírito Santo</SelectItem>
+                  <SelectItem value="GO">Goiás</SelectItem>
+                  <SelectItem value="MA">Maranhão</SelectItem>
+                  <SelectItem value="MT">Mato Grosso</SelectItem>
+                  <SelectItem value="MS">Mato Grosso do Sul</SelectItem>
+                  <SelectItem value="MG">Minas Gerais</SelectItem>
+                  <SelectItem value="PA">Pará</SelectItem>
+                  <SelectItem value="PB">Paraíba</SelectItem>
+                  <SelectItem value="PR">Paraná</SelectItem>
+                  <SelectItem value="PE">Pernambuco</SelectItem>
+                  <SelectItem value="PI">Piauí</SelectItem>
+                  <SelectItem value="RJ">Rio de Janeiro</SelectItem>
+                  <SelectItem value="RN">Rio Grande do Norte</SelectItem>
+                  <SelectItem value="RS">Rio Grande do Sul</SelectItem>
+                  <SelectItem value="RO">Rondônia</SelectItem>
+                  <SelectItem value="RR">Roraima</SelectItem>
+                  <SelectItem value="SC">Santa Catarina</SelectItem>
+                  <SelectItem value="SP">São Paulo</SelectItem>
+                  <SelectItem value="SE">Sergipe</SelectItem>
+                  <SelectItem value="TO">Tocantins</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="cep">CEP</Label>
+              <Input 
+                id="cep"
+                value={formData.cep}
+                onChange={(e) => handleInputChange("cep", e.target.value)}
+                placeholder="00000-000"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -200,7 +318,7 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
               id="telefone"
               value={formData.telefone}
               onChange={(e) => handleInputChange("telefone", e.target.value)}
-              placeholder="(00) 00000-0000"
+              placeholder="(00)00000-0000 ou (00)0000-0000"
             />
           </div>
           

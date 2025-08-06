@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -41,9 +42,9 @@ const CadastroStep3 = ({ onSubmit, onPrev, initialData }: CadastroStep3Props) =>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <Card className="border-warning">
+      <Card className="border-secondary">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-warning">
+          <CardTitle className="flex items-center gap-2 text-secondary">
             <CreditCard className="w-5 h-5" />
             Cartão de Identificação da Pessoa com NMOSD
           </CardTitle>

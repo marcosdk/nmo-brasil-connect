@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Menu, Phone, Mail } from "lucide-react";
 
@@ -9,7 +10,7 @@ const Header = () => {
         <div className="flex items-center justify-center py-4">
           <div className="flex items-center gap-4">
             <img 
-              src="/lovable-uploads/4ab958f2-3798-434d-9566-2e7518f18307.png" 
+              src="/lovable-uploads/bcd219f3-2d65-4b23-b076-0b7b1d52f6c1.png" 
               alt="NMO Brasil" 
               className="h-16 w-auto"
             />

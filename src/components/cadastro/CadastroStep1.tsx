@@ -81,8 +81,8 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.consentimentoCompartilhamento || !formData.consentimentoDadosSensiveis) {
-      alert("É necessário concordar com o compartilhamento de dados para continuar.");
+    if (!formData.consentimentoCompartilhamento && !formData.consentimentoDadosSensiveis) {
+      alert("É necessário concordar com pelo menos um dos consentimentos para continuar.");
       return;
     }
     

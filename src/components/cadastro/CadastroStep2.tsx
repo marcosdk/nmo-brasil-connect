@@ -25,6 +25,7 @@ const CadastroStep2 = ({ onNext, onPrev, initialData }: CadastroStep2Props) => {
     tipoTratamento: "",
     outrosDiagnosticos: "",
     laudoMedico: null as File | null,
+    documentoFoto: null as File | null,
     ...initialData
   });
 
@@ -32,9 +33,9 @@ const CadastroStep2 = ({ onNext, onPrev, initialData }: CadastroStep2Props) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (field: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setFormData({ ...formData, laudoMedico: file });
+    setFormData({ ...formData, [field]: file });
   };
 
   const handleSequelaChange = (sequela: string, checked: boolean) => {
@@ -204,7 +205,7 @@ const CadastroStep2 = ({ onNext, onPrev, initialData }: CadastroStep2Props) => {
                   type="file"
                   id="laudoMedico"
                   accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                  onChange={handleFileChange}
+                  onChange={(e) => handleFileChange("laudoMedico", e)}
                   className="hidden"
                 />
                 <label 
@@ -217,6 +218,36 @@ const CadastroStep2 = ({ onNext, onPrev, initialData }: CadastroStep2Props) => {
                       {formData.laudoMedico 
                         ? `Arquivo selecionado: ${formData.laudoMedico.name}` 
                         : "Clique para fazer upload do laudo médico"
+                      }
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      PDF, JPG, PNG, DOC até 10MB
+                    </p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="documentoFoto">Anexar documento com FOTO</Label>
+              <div className="mt-2">
+                <input
+                  type="file"
+                  id="documentoFoto"
+                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                  onChange={(e) => handleFileChange("documentoFoto", e)}
+                  className="hidden"
+                />
+                <label 
+                  htmlFor="documentoFoto" 
+                  className="flex items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors"
+                >
+                  <div className="text-center">
+                    <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">
+                      {formData.documentoFoto 
+                        ? `Arquivo selecionado: ${formData.documentoFoto.name}` 
+                        : "Clique para fazer upload do documento com foto"
                       }
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">

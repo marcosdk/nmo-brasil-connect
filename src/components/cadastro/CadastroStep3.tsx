@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CreditCard, ArrowLeft, CheckCircle, Info } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CadastroStep3Props {
   onSubmit: (data: any) => void;
@@ -17,6 +18,7 @@ interface CadastroStep3Props {
 }
 
 const CadastroStep3 = ({ onSubmit, onPrev, initialData }: CadastroStep3Props) => {
+  const isMobile = useIsMobile();
   const [formData, setFormData] = useState({
     desejCartao: "",
     nomeCartao: "",
@@ -383,15 +385,15 @@ const CadastroStep3 = ({ onSubmit, onPrev, initialData }: CadastroStep3Props) =>
         </CardContent>
       </Card>
 
-      <div className="flex justify-between">
-        <Button type="button" variant="outline" onClick={onPrev}>
+      <div className={`flex ${isMobile ? 'flex-col gap-3' : 'justify-between'}`}>
+        <Button type="button" variant="outline" onClick={onPrev} className={isMobile ? 'w-full' : ''}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Etapa Anterior
         </Button>
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          className="min-w-[200px]"
+          className={isMobile ? 'w-full' : 'min-w-[200px]'}
         >
           {isSubmitting ? "Enviando..." : "Finalizar Cadastro"}
         </Button>

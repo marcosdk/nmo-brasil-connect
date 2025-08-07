@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Stethoscope, ArrowLeft, Upload } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CadastroStep2Props {
   onNext: (data: any) => void;
@@ -16,6 +17,7 @@ interface CadastroStep2Props {
 }
 
 const CadastroStep2 = ({ onNext, onPrev, initialData }: CadastroStep2Props) => {
+  const isMobile = useIsMobile();
   const [formData, setFormData] = useState({
     anoDiagnostico: "",
     medicoHospital: "",
@@ -262,12 +264,12 @@ const CadastroStep2 = ({ onNext, onPrev, initialData }: CadastroStep2Props) => {
         </CardContent>
       </Card>
 
-      <div className="flex justify-between">
-        <Button type="button" variant="outline" onClick={onPrev}>
+      <div className={`flex ${isMobile ? 'flex-col gap-3' : 'justify-between'}`}>
+        <Button type="button" variant="outline" onClick={onPrev} className={isMobile ? 'w-full' : ''}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Etapa Anterior
         </Button>
-        <Button type="submit">
+        <Button type="submit" className={isMobile ? 'w-full' : ''}>
           Continuar para Próxima Etapa
         </Button>
       </div>

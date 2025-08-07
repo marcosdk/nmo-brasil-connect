@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, Shield } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CadastroStep1Props {
   onNext: (data: any) => void;
@@ -16,6 +17,7 @@ interface CadastroStep1Props {
 }
 
 const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
+  const isMobile = useIsMobile();
   const [formData, setFormData] = useState({
     consentimentoCompartilhamento: false,
     consentimentoDadosSensiveis: false,
@@ -72,6 +74,20 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
       // Máscara CEP: 00000-000
       const numericValue = value.replace(/\D/g, "");
       const maskedValue = numericValue.replace(/(\d{5})(\d{1,3})$/, "$1-$2");
+      setFormData({ ...formData, [field]: maskedValue });
+    } else if (field === "dataNascimento" && isMobile) {
+      // Máscara de data para mobile: DD/MM/AAAA
+      const numericValue = value.replace(/\D/g, "");
+      let maskedValue = "";
+      
+      if (numericValue.length <= 2) {
+        maskedValue = numericValue;
+      } else if (numericValue.length <= 4) {
+        maskedValue = numericValue.replace(/(\d{2})(\d{1,2})/, "$1/$2");
+      } else {
+        maskedValue = numericValue.replace(/(\d{2})(\d{2})(\d{1,4})/, "$1/$2/$3");
+      }
+      
       setFormData({ ...formData, [field]: maskedValue });
     } else {
       setFormData({ ...formData, [field]: value });
@@ -158,13 +174,25 @@ const CadastroStep1 = ({ onNext, initialData }: CadastroStep1Props) => {
           
           <div>
             <Label htmlFor="dataNascimento">Data de Nascimento *</Label>
-            <Input 
-              id="dataNascimento"
-              type="date"
-              value={formData.dataNascimento}
-              onChange={(e) => handleInputChange("dataNascimento", e.target.value)}
-              required
-            />
+            {isMobile ? (
+              <Input 
+                id="dataNascimento"
+                type="text"
+                value={formData.dataNascimento}
+                onChange={(e) => handleInputChange("dataNascimento", e.target.value)}
+                placeholder="DD/MM/AAAA"
+                maxLength={10}
+                required
+              />
+            ) : (
+              <Input 
+                id="dataNascimento"
+                type="date"
+                value={formData.dataNascimento}
+                onChange={(e) => handleInputChange("dataNascimento", e.target.value)}
+                required
+              />
+            )}
           </div>
         </div>
 
